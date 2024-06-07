@@ -64,7 +64,7 @@ match(opcaoEntrada):
                                     print("hmm, não existe essa opção!")
                         case "2":
                             visualizar_atividadesUsuario(atividades)
-                            inscrever_atividade(opcaoUser)
+                            # aqui adicionar a função para o usuário se increver nas atividades
                         case "3":
                             exibir_perfil_voluntario(voluntarios, id_voluntario)
                         case "4":
@@ -132,47 +132,12 @@ match(opcaoEntrada):
                         case _:
                             print("Hmm, não existe essa opção!")
     case "2":
-        voluntario_logado = login(opcaoUser)
-        if voluntario_logado: 
-            nome_usuario_logado = voluntario_logado['nome']
-
-            os.system("cls")
-            print(f"\nLogin realizado com sucesso, {nome_usuario_logado}! Você agora está logado em sua conta\n")
-            id_voluntario = voluntario_logado['id']
-
-            while True:
-                opcao = input(f"\n0 - Sair | 1- Sobre nós | 2 - EcoVoluntariado | 3- Seu Perfil | 4- Descontos dos Parceiros\n")
-                match opcao:
-                    case "0":
-                        print("				\t\tAgradecemos por usar nosso sistema! Até a próxima")
-                        break
-                    case "1":
-                        while True:
-                            print("\nINTEGRANTES DO TIME:\n")
-                            print("Laura Cintra. RM: 558843\nMaria Eduarda. RM:558832\nVínicius Saes. RM: 554456\n")
-                            print("Juntos, somos um time dedicado a resolver os problemas da poluição dos oceanos, incentivando a colaboração da sociedade e promovendo o ecovoluntariado.\n")
-                            opcao = input("DESEJA ACESSAR NOSSO REPOSITÓRIO NO GITHUB? 1-sim|2-não -> ")
-
-                            if opcao == "1":
-                                link_github = "https://github.com/EcoWaves/python-GS.git"
-                                abrir_github(link_github)
-                                break
-                            elif opcao == "2":
-                                print("Okay! Então, continue navegando! :)")
-                                break
-                            else:
-                                print("hmm, não existe essa opção!")
-                    case "2":
-                        visualizar_atividadesUsuario(atividades)
-                        inscrever_atividade(opcaoUser)
-                    case "3":
-                        exibir_perfil_voluntario(voluntarios, id_voluntario)
-                    case "4":
-                        print("\nNós temos parcerias com hoteis e pousadas, que fornecem descontos para nossos usuários!")
-                        print("Basta copiar o código e colar o código na página de nosso parceiro. E você terá o desconto estipulado.: \n")
-                        visualizar_cupons(cupons)
-                    case _:
-                        print("Hmm, não existe essa opção!")
+        print("\nLogin:")
+        usuario = login(opcaoUser)
+        if usuario:
+            print(f"Bem-vindo, {usuario['nome']}!")
+        else:
+            print("Email ou senha inválidos.")
     case 3:
         print("				\t\tAgradecemos por usar nosso sistema! Até a próxima")
     case _:
