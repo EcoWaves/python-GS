@@ -1,119 +1,180 @@
 # participantes
 # Laura (RM: 558843) | Maria Eduarda (RM: 558832) | Vínicius Saes (RM: 554456)
 
-# bibliotecas
+# importações
 import os
-import re
 
-# 1º função - valida se o e-mail está nos conformes
+from datetime import datetime
+from funcoes import *
 
-def verifica_email(email):
-    regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    if re.match(regex, email):
-        return True
-    else:
-        return False
-    
-# Listas para armazenar os diferentes tipos de usuários
-voluntarios = []
-ongs = []
-parceiros = []
-
-# 2° função - solicita ao voluntario os dados necessários, depois os adiciona em um dicionário
-def cadastrar_voluntario():
-    nome = input("Nome: ")
-    email = input("Email: ")
-    senha = input("Senha: ")
-    voluntario = {
-        "id": id,
-        "nome": nome,
-        "email": email,
-        "senha": senha,
-        "tipo": "voluntario"
-    }
-    voluntarios.append(voluntario)
-    print("Voluntário cadastrado com sucesso!")
-
-# 3° função - solicita a ONG os dados necessários, depois os adiciona em um dicionário
-def cadastrar_ong():
-    nome = input("Razão Social: ")
-    email = input("Email: ")
-    senha = input("Senha: ")
-    cnpj = input("CNPJ: ") 
-    descricao = input("Descrição: ")
-    ong = {
-        "id": id,
-        "razao_social": nome,
-        "email": email,
-        "senha": senha,
-        "cnpj": cnpj,
-        "descricao": descricao,
-        "tipo": "ong"
-    }
-    ongs.append(ong)
-    print("ONG cadastrada com sucesso!")
-
-# 4° função - solicita ao parceiro (hospedagens) os dados necessários, depois os adiciona em um dicionário
-def cadastrar_parceiro():
-    nome = input("Razão Social: ")
-    email = input("Email: ")
-    senha = input("Senha: ")
-    parceiro = {
-        "razao_social": nome,
-        "email": email,
-        "senha": senha,
-        "tipo": "parceiro"
-    }
-    parceiros.append(parceiro)
-    print("Parceiro cadastrado com sucesso!")
-
-def login(tipo, email, senha):
-    if tipo == "1":
-        for usuario in voluntarios:
-            if usuario["email"] == email and usuario["senha"] == senha:
-                return usuario
-    elif tipo == "2":
-        for usuario in ongs:
-            if usuario["email"] == email and usuario["senha"] == senha:
-                return usuario
-    elif tipo == "3":
-        for usuario in parceiros:
-            if usuario["email"] == email and usuario["senha"] == senha:
-                return usuario
-    return None
+#----------------------------------------------------------------------- PROGRAMA PRINCIPAL
 
 # Menu para interagir com o usuário
+
+
+print("				\t\tTELA INICIAL ECOWAVES")
+print("			\tQual você se encaixa -> 1 - Voluntario | 2 - ONG | 3 - Parceiros")
+opcaoUser = input(" ")
 while True:
+    if opcaoUser == "":
+        print("Você precisa digitar uma opção válida!")
+        opcaoUser = input("Digite a opção desejada: ")
+    elif opcaoUser == "1" or opcaoUser == "2" or opcaoUser == "3":
+        break
+    else:
+        print("Você precisa digitar uma opção válida!")
+        opcaoUser = input("Digite a opção desejada: ")
 
-    print("				OLÁ!!! BEM-VINDO(A) AO ECOWAVES. ESCOLHA UMA OPÇÃO QUE VOCÊ SE ENCAIXE:")
-    opcaoUser = input("1 - Voluntario | 2 - ONG | 3 - Parceiro (hospedagens) | ")
-    opcaoEntrada = input("Legal! E você deseja (1)cadastrar-se, (2) fazer login ou (3) sair do sistema? ")
-    
-    # print("1. Cadastrar Voluntário")
-    # print("2. Cadastrar ONG")
-    # print("3. Cadastrar Parceiro")
-    # print("4. Login")
-    # print("5. Sair")
-    
-    # opcao = input("Escolha uma opção: ")
+print("\nLegal! E você deseja:")
+opcaoEntrada = input("[1] - cadastrar-se | [2] - Login | [3] - sair do sistema ->  ")
 
-    match(opcaoEntrada):
-        case "1":
-            if(opcaoUser == "1"):
-                cadastrar_voluntario()
-                print("Voluntario cadastrado")
-            elif(opcaoUser == "2"):
-                cadastrar_ong()
-                print("ONG cadastrada")
-            elif(opcaoUser == "3"):
-                cadastrar_parceiro()
-                print("Parceiro cadastrado")
-        case "2":
-            email = input("Email: ")
-            senha = input("Senha: ")
-            usuario = login(opcaoUser,email, senha)
-            if usuario:
-                print(f"Bem-vindo, {usuario['nome']}!")
+match(opcaoEntrada):
+    case "1":
+        if(opcaoUser == "1"):
+            cadastrar_voluntario()
+            voluntario_logado = login(opcaoUser)
+            if voluntario_logado: 
+                nome_usuario_logado = voluntario_logado['nome']
+
+                os.system("cls")
+                print(f"\nLogin realizado com sucesso, {nome_usuario_logado}! Você agora está logado em sua conta\n")
+                id_voluntario = voluntario_logado['id']
+
+                while True:
+                    opcao = input(f"\n0 - Sair | 1- Sobre nós | 2 - EcoVoluntariado | 3- Seu Perfil | 4- Descontos dos Parceiros\n")
+                    match opcao:
+                        case "0":
+                            print("				\t\tAgradecemos por usar nosso sistema! Até a próxima")
+                            break
+                        case "1":
+                            while True:
+                                print("\nINTEGRANTES DO TIME:\n")
+                                print("Laura Cintra. RM: 558843\nMaria Eduarda. RM:558832\nVínicius Saes. RM: 554456\n")
+                                print("Juntos, somos um time dedicado a resolver os problemas da poluição dos oceanos, incentivando a colaboração da sociedade e promovendo o ecovoluntariado.\n")
+                                opcao = input("DESEJA ACESSAR NOSSO REPOSITÓRIO NO GITHUB? 1-sim|2-não -> ")
+
+                                if opcao == "1":
+                                    link_github = "https://github.com/EcoWaves/python-GS.git"
+                                    abrir_github(link_github)
+                                    break
+                                elif opcao == "2":
+                                    print("Okay! Então, continue navegando! :)")
+                                    break
+                                else:
+                                    print("hmm, não existe essa opção!")
+                        case "2":
+                            visualizar_atividadesUsuario(atividades)
+                            inscrever_atividade(opcaoUser)
+                        case "3":
+                            exibir_perfil_voluntario(voluntarios, id_voluntario)
+                        case "4":
+                            print("\nNós temos parcerias com hoteis e pousadas, que fornecem descontos para nossos usuários!")
+                            print("Basta copiar o código e colar o código na página de nosso parceiro. E você terá o desconto estipulado.: \n")
+                            visualizar_cupons(cupons)
+                        case _:
+                            print("Hmm, não existe essa opção!")
             else:
-                print("Email ou senha inválidos.")     
+                os.system("cls")
+                print("\nLogin ou senha incorretos. Tente novamente.")
+        elif(opcaoUser == "2"):
+            cadastrar_ong()
+            ong_logada = login(opcaoUser)
+            if ong_logada: 
+                razaosocial_ong = ong_logada['nome']
+                os.system("cls")
+                print(f"\nLogin realizado com sucesso, {razaosocial_ong}! Você agora está logado em sua conta\n")
+                id_ong = ong_logada['id']
+
+                while True:
+                    opcao = input(f"\n0 - Sair | 1- Registrar uma Atividade | 2 - Ver suas Atividades | 3- Seu Perfil\n")
+
+                    # opcao1 = input(f"\0 - Sair | 1- Registrar uma Atividade | 2 - Ver suas Atividades | 3- Seu Perfil\n")
+                    match opcao:
+                        case "0":
+                            print("				\t\tAgradecemos por usar nosso sistema! Até a próxima")
+                            break
+                        case "1":  
+                            print("Cadastro da atividade:")
+                            cadastrar_atividade(atividades,id_ong)
+                        case "2":
+                            visualizar_atividade(atividades,id_ong)
+                        case "3":
+                            exibir_perfil_ong(ongs, id_ong)
+                        case _:
+                            print("Hmm, não existe essa opção!")
+            else:
+                os.system("cls")
+                print("\nLogin ou senha incorretos. Tente novamente.")
+                ong_logada = login(opcaoUser)
+        elif(opcaoUser == "3"):
+                cadastrar_parceiro()
+                parceiro_logado = login(opcaoUser)
+                if parceiro_logado: 
+                    nome_parceiro_logado = parceiro_logado['nome']
+
+                os.system("cls")
+                print(f"\nLogin realizado com sucesso, {nome_parceiro_logado}! Você agora está logado em sua conta\n")
+                id_parceiro= parceiro_logado['id']
+
+
+                while True:
+                    opcao = input(f"\n0 - Sair | 1- Registrar um Desconto | 2 - Ver desconto | 3- Seu Perfil\n")
+                    match opcao:
+                        case "0":
+                            print("				\t\tAgradecemos por usar nosso sistema! Até a próxima")
+                            break
+                        case "1":
+                            cadastrar_cupom(cupons, id_parceiro, nome_parceiro_logado)
+                        case "2":
+                            visualizar_cupomParceiro(cupons, id_parceiro, nome_parceiro_logado)
+                        case "3":
+                            exibir_perfil_parceiro(parceiros, id_parceiro)
+                        case _:
+                            print("Hmm, não existe essa opção!")
+    case "2":
+        voluntario_logado = login(opcaoUser)
+        if voluntario_logado: 
+            nome_usuario_logado = voluntario_logado['nome']
+
+            os.system("cls")
+            print(f"\nLogin realizado com sucesso, {nome_usuario_logado}! Você agora está logado em sua conta\n")
+            id_voluntario = voluntario_logado['id']
+
+            while True:
+                opcao = input(f"\n0 - Sair | 1- Sobre nós | 2 - EcoVoluntariado | 3- Seu Perfil | 4- Descontos dos Parceiros\n")
+                match opcao:
+                    case "0":
+                        print("				\t\tAgradecemos por usar nosso sistema! Até a próxima")
+                        break
+                    case "1":
+                        while True:
+                            print("\nINTEGRANTES DO TIME:\n")
+                            print("Laura Cintra. RM: 558843\nMaria Eduarda. RM:558832\nVínicius Saes. RM: 554456\n")
+                            print("Juntos, somos um time dedicado a resolver os problemas da poluição dos oceanos, incentivando a colaboração da sociedade e promovendo o ecovoluntariado.\n")
+                            opcao = input("DESEJA ACESSAR NOSSO REPOSITÓRIO NO GITHUB? 1-sim|2-não -> ")
+
+                            if opcao == "1":
+                                link_github = "https://github.com/EcoWaves/python-GS.git"
+                                abrir_github(link_github)
+                                break
+                            elif opcao == "2":
+                                print("Okay! Então, continue navegando! :)")
+                                break
+                            else:
+                                print("hmm, não existe essa opção!")
+                    case "2":
+                        visualizar_atividadesUsuario(atividades)
+                        inscrever_atividade(opcaoUser)
+                    case "3":
+                        exibir_perfil_voluntario(voluntarios, id_voluntario)
+                    case "4":
+                        print("\nNós temos parcerias com hoteis e pousadas, que fornecem descontos para nossos usuários!")
+                        print("Basta copiar o código e colar o código na página de nosso parceiro. E você terá o desconto estipulado.: \n")
+                        visualizar_cupons(cupons)
+                    case _:
+                        print("Hmm, não existe essa opção!")
+    case 3:
+        print("				\t\tAgradecemos por usar nosso sistema! Até a próxima")
+    case _:
+        print("Hmmm, não existe essa opção!")     
             
