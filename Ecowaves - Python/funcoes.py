@@ -112,14 +112,14 @@ def isfloat(v:str) -> bool:
     return retorno
     
 # Listas para armazenar os diferentes tipos de usuários
-voluntarios = []
-ongs = []
+voluntarios = [{'id': 1, 'nome': 'Saes', 'email': 'saes@fiap.com', 'senha': 'RM554456$', 'tipo': 'voluntario'}]
+ongs = [{'id': 1, 'nome': 'ONG Oceana', 'email': 'oceana@ong.com', 'senha': 'Dpx101894$', 'cnpj': '14.780.332/0001-31', 'descricao': 'Ong de preservação dos oceanos', 'tipo': 'ong'}]
 parceiros = []
 
-# Listas para armazenar as funcionalidades de criar (atividades e cupons) do site
-atividades = []
+# Listas para armazenar as funcionalidades de criar (atividades e cupons) do site e armazenar os inscritos
+atividades = [{'id_atividade': 1, 'nome_atividade': 'Limpeza de praia', 'data_atividade': '08/09/2024', 'descricao_atividade': 'Fazer limpeza da praia de Bertioga e remoção de microplásticos na área costeira, atividade acompanhada de Guia.', 'vagas': 10, 'local': 'Bertioga - SP', 'horario': '09:00 - 11:00', 'id_ong': 1}, {'id_atividade': 2, 'nome_atividade': 'Limpeza SubAquatica', 'data_atividade': '11/10/2024', 'descricao_atividade': 'Mergulho acompanhado de um Guia para remoção de lixos, entulhos e detritos do mar.', 'vagas': 15, 'local': 'Fernando de Noronha', 'horario': '09:00 - 13:00', 'id_ong': 1}]
 cupons = []
-
+inscritos = []
 
 # 2° função - solicita ao voluntario os dados necessários, depois os adiciona em um dicionário
 def cadastrar_voluntario():
@@ -343,6 +343,8 @@ def visualizar_atividade(atividades, id_ong):
         print(f"{i + 1}. Atividade: (ID: {atividade['id_atividade']}) {atividade['nome_atividade']}, "
               f"Descrição: {atividade['descricao_atividade']}, Data: {atividade['data_atividade']}, "
               f"Local: {atividade['local']}, Horário: {atividade['horario']}, Vagas: {atividade['vagas']}")
+    inscrever_atividade()
+
 
 def exibir_perfil_ong(ongs, id_ong):
     # Percorrer a lista de ONGs para encontrar a ONG com o ID especificado
@@ -357,12 +359,50 @@ def exibir_perfil_ong(ongs, id_ong):
     print("ONG não encontrada.")
 
 #FUNÇÕES DO VOLUNTÁRIO
+# def visualizar_atividadesUsuario(atividades):
+#      for i, atividade in enumerate(atividades):
+#         print(f"{i + 1}. Atividade: (ID: {atividade['id_atividade']}) {atividade['nome_atividade']}, (OFERECIDA PELA ONG: {atividade[id_ong]}) "
+#               f"Descrição: {atividade['descricao_atividade']}, Data: {atividade['data_atividade']}, "
+#               f"Local: {atividade['local']}, Horário: {atividade['horario']}, Vagas: {atividade['vagas']}")
 def visualizar_atividadesUsuario(atividades):
-     for i, atividade in enumerate(atividades):
-        print(f"{i + 1}. Atividade: (ID: {atividade['id_atividade']}) {atividade['nome_atividade']}, (OFERECIDA PELA ONG: {atividade[id_ong]}) "
+    os.system('cls')
+    if not atividades:
+        print("Não há atividades disponíveis no momento.")
+        return
+
+    for i, atividade in enumerate(atividades):
+        print(f"{i + 1}. Atividade: (ID: {atividade['id_atividade']}) {atividade['nome_atividade']}, (OFERECIDA PELA ONG: {atividade['id_ong']}) "
               f"Descrição: {atividade['descricao_atividade']}, Data: {atividade['data_atividade']}, "
               f"Local: {atividade['local']}, Horário: {atividade['horario']}, Vagas: {atividade['vagas']}")
-        
+    
+#FUNÇÃO PARA USUÁRIO SE CADASTRAR EM UMA ATIVIDADE
+def inscrever_atividade(id_voluntario):
+    print("\nAtividades Disponíveis:")
+    for atividade in atividades:
+        print(f"{atividade['id_atividade']} - {atividade['nome_atividade']}: {atividade['descricao_atividade']}")
+
+    id_atividade = input("\nInsira o ID da atividade que deseja se inscrever: ")
+    id_atividade = int(id_atividade)
+
+    # Verifica se o ID da atividade é válido
+    if id_atividade not in [atividade['id_atividade'] for atividade in atividades]:
+        print("ID de atividade inválido.")
+        return
+
+    # Verifica se o voluntário já está inscrito na atividade
+    for atividade in atividades:
+        if atividade['id_atividade'] == id_atividade and id_voluntario in inscritos:
+            print("Você já está inscrito nesta atividade.")
+            return
+
+    # Inscreve o voluntário na atividade
+    for atividade in atividades:
+        if atividade['id_atividade'] == id_atividade:
+            inscritos.append(id_voluntario)
+            print("Inscrição realizada com sucesso.")
+            return
+
+
 def exibir_perfil_voluntario(voluntario, id_voluntario):
     # Percorrer a lista de Parceiros para encontrar o parceiro com o ID especificado
     for voluntarios in voluntario:
